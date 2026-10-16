@@ -13,6 +13,23 @@ permissions:
 
 jobs:
   build:
+      - name: Find Android project and build APK
+        shell: bash
+        run: |
+          echo "Searching for Android project..."
+          find . -type f -name settings.gradle -print
+          find . -type f -name build.gradle -print
+
+          PROJECT_DIR="$(find . -type f -name settings.gradle -not -path './.git/*' -print -quit | xargs -r dirname)"
+
+          if [ -z "$PROJECT_DIR" ]; then
+            echo "ERROR: settings.gradle nahi mili. Project files upload check karo."
+            exit 1
+          fi
+
+          cd "$PROJECT_DIR"
+          gradle assembleDebug
+
     runs-on: ubuntu-latest
 
     steps:
