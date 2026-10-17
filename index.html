@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b18">
+  <title>SHIVA AI Assistant</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #080b18;
+      color: #f3f5ff;
+      font-family: system-ui, sans-serif;
+    }
+    header {
+      padding: 18px;
+      border-bottom: 1px solid #252c48;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      background: linear-gradient(135deg,#6048ff,#00c9ff);
+      box-shadow: 0 0 25px #5544ff55;
+    }
+    h1 { font-size: 21px; margin: 0; }
+    .sub { color: #9ba9cc; font-size: 12px; margin-top: 4px; }
+    main { max-width: 760px; margin: auto; padding: 18px; }
+    .status {
+      color: #76f5bd;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .hero {
+      text-align: center;
+      padding: 18px 0 24px;
+    }
+    .core {
+      width: 112px;
+      height: 112px;
+      margin: 0 auto 18px;
+      border: 2px solid #7164ff;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 48px;
+      background: radial-gradient(circle,#29256c,#0c1230);
+      box-shadow: 0 0 38px #5446ff55;
+    }
+    h2 { font-size: 24px; margin: 8px 0; }
+    p { color: #aab6d4; line-height: 1.6; }
+    .panel {
+      background: #11172a;
+      border: 1px solid #293251;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    #chat {
+      height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg {
+      padding: 12px 14px;
+      border-radius: 14px;
+      max-width: 90%;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .bot { background: #202744; align-self: flex-start; }
+    .user { background: #4438a8; align-self: flex-end; }
+    .label { font-size: 12px; color: #aab6d4; margin-bottom: 8px; }
+    .inputrow { display: flex; gap: 8px; }
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #384366;
+      background: #090e20;
+      color: white;
+      font-size: 16px;
+    }
+    button {
+      border: 0;
+      border-radius: 12px;
+      background: #6554f5;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px 15px;
+      cursor: pointer;
+    }
+    button:active { opacity: .75; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .secondary { background: #222b48; }
+    .note { font-size: 12px; color: #91a0c3; }
+    a { color: #85dfff; }
+    footer { text-align: center; padding: 20px; color: #8290b3; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🔱</div>
+    <div>
+      <h1>SHIVA AI</h1>
+      <div class="sub">YOUR PERSONAL AI ASSISTANT</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="status">● SHIVA सिस्टम तैयार है</div>
+
+    <section class="hero">
+      <div class="core">ॐ</div>
+      <h2>नमस्ते! मैं SHIVA हूँ</h2>
+      <p>अपना सवाल लिखो या माइक्रोफोन दबाकर बोलो।</p>
+    </section>
+
+    <section class="panel">
+      <div id="chat" aria-live="polite">
+        <div class="msg bot">नमस्ते! 🙏 मैं SHIVA AI हूँ।
+अभी मेरा शुरुआती संस्करण चल रहा है।
+मुझसे समय, सामान्य सवाल या उपलब्ध डेमो कमांड पूछ सकते हो।</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="label">अपना संदेश लिखें</div>
+      <form id="form" class="inputrow">
+        <input id="question" placeholder="SHIVA, मेरी मदद करो..." autocomplete="off">
+        <button type="submit">भेजें</button>
+      </form>
+
+      <div class="tools">
+        <button type="button" id="mic" class="secondary">🎙️ बोलें</button>
+        <button type="button" id="speak" class="secondary">🔊 आवाज़ चालू</button>
+        <button type="button" id="stop" class="secondary">⏹ रोकें</button>
+      </div>
+      <p id="voiceStatus" class="note">आवाज़ की सुविधा ब्राउज़र के समर्थन पर निर्भर है।</p>
+    </section>
+
+    <section class="panel">
+      <h3>मेरे टूल्स</h3>
+      <div class="tools">
+        <button type="button" class="secondary" data-q="अभी कितने बजे हैं?">🕒 समय</button>
+        <button type="button" class="secondary" data-q="मुझे पढ़ाई का प्लान बनाकर दो।">📚 पढ़ाई</button>
+        <button type="button" class="secondary" data-q="मुझे एक वेबसाइट बनाना सिखाओ।">💻 कोडिंग</button>
+        <button type="button" class="secondary" data-q="इंटरनेट सर्च कैसे काम करेगी?">🌐 इंटरनेट</button>
+      </div>
+    </section>
+
+    <p class="note">ध्यान दें: यह शुरुआती डेमो है। असली AI मॉडल, लाइव इंटरनेट सर्च और मोबाइल कंट्रोल अभी कनेक्ट नहीं हैं।</p>
+  </main>
+
+  <footer>SHIVA AI · आपका डिजिटल सहायक</footer>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("question");
+    const voiceStatus = document.getElementById("voiceStatus");
+    let voiceEnabled = false;
+
+    function addMessage(text, who) {
+      const div = document.createElement("div");
+      div.className = "msg " + who;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      return div;
+    }
+
+    function speak(text) {
+      if (!voiceEnabled || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "hi-IN";
+      utterance.rate = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function getReply(question) {
+      const q = question.toLowerCase();
+
+      if (q.includes("समय") || q.includes("कितने बजे") || q.includes("time")) {
+        return "अभी आपके फोन के अनुसार समय है: " +
+          new Date().toLocaleTimeString("hi-IN", {
+            hour: "2-digit", minute: "2-digit"
+          }) + "।";
+      }
+
+      if (q.includes("नमस्ते") || q.includes("हेलो") || q.includes("hello")) {
+        return "नमस्ते! 🙏 बताओ, मैं तुम्हारी किस काम में मदद करूँ?";
+      }
+
+      if (q.includes("पढ़ाई")) {
+        return "पढ़ाई का शुरुआती प्लान:\n1. 25 मिनट एक विषय पढ़ो।\n2. 5 मिनट आराम करो।\n3. 10 सवाल हल करो।\n4. अंत में दोहराओ।\nअपना विषय बताओ ताकि प्लान बेहतर बना सकूँ।";
+      }
+
+      if (q.includes("वेबसाइट") || q.includes("कोडिंग")) {
+        return "वेबसाइट बनाने के लिए HTML, CSS और JavaScript सीखेंगे। अभी यह SHIVA का शुरुआती इंटरफेस है। अगले चरण में हम असली AI बैकएंड जोड़ेंगे।";
+      }
+
+      if (q.includes("इंटरनेट") || q.includes("सर्च")) {
+        return "लाइव इंटरनेट सर्च अभी जुड़ी नहीं है। अगले चरण में हम सुरक्षित सर्वर के जरिए वेब सर्च जोड़ेंगे।";
+      }
+
+      return "मैंने तुम्हारा सवाल पढ़ लिया है: \"" + question +
+        "\"\n\nअभी मैं डेमो मोड में हूँ। असली AI जवाब पाने के लिए हमें सुरक्षित बैकएंड और AI API जोड़नी होगी।";
+    }
+
+    function sendQuestion(question) {
+      const q = question.trim();
+      if (!q) return;
+
+      addMessage(q, "user");
+      input.value = "";
+
+      const reply = getReply(q);
+      addMessage(reply, "bot");
+      speak(reply);
+    }
+
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      sendQuestion(input.value);
+    });
+
+    document.querySelectorAll("[data-q]").forEach(function(button) {
+      button.addEventListener("click", function() {
+        sendQuestion(button.dataset.q);
+      });
+    });
+
+    document.getElementById("speak").addEventListener("click", function() {
+      voiceEnabled = !voiceEnabled;
+      this.textContent = voiceEnabled ? "🔊 आवाज़ चालू है" : "🔊 आवाज़ चालू";
+      if (voiceEnabled) {
+        speak("नमस्ते! मैं SHIVA हूँ।");
+      } else if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    });
+
+    document.getElementById("stop").addEventListener("click", function() {
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      voiceStatus.textContent = "आवाज़ रोक दी गई।";
+    });
+
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    document.getElementById("mic").addEventListener("click", function() {
+      if (!SpeechRecognition) {
+        voiceStatus.textContent =
+          "इस ब्राउज़र में आवाज़ पहचान उपलब्ध नहीं है। Chrome में HTTPS पर कोशिश करें।";
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = "hi-IN";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = function() {
+        voiceStatus.textContent = "सुन रहा हूँ... अब बोलिए।";
+      };
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        input.value = transcript;
+        voiceStatus.textContent = "आपने कहा: " + transcript;
+        sendQuestion(transcript);
+      };
+
+      recognition.onerror = function(event) {
+        voiceStatus.textContent = "आवाज़ में समस्या: " + event.error;
+      };
+
+      recognition.onend = function() {
+        if (voiceStatus.textContent === "सुन रहा हूँ... अब बोलिए।") {
+          voiceStatus.textContent = "सुनना बंद हुआ। फिर से बोलने के लिए दबाएँ।";
+        }
+      };
+
+      recognition.start();
+    });
+  </script>
+</body>
+  </html>
+          
